@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "baseUrl": "./src",
+    "paths": {
+      "@app/": ["src/app"],
+      "@modules/": ["src/modules"]
+      // Add more aliases as needed
+    },
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -9,7 +15,6 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,

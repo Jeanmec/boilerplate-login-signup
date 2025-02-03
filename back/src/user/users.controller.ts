@@ -17,7 +17,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   async getAllUsers(): Promise<User[]> {
     const users = await this.usersService.getAllUsers();
     return users;

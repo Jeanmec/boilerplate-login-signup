@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import User from './user.entity';
 import { CreateUserDto } from './dto/user.dto';
+import { MailService } from '../mail/mail.service';
 
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly mailService: MailService,
   ) {}
 
   async getAllUsers() {
@@ -21,6 +23,9 @@ export class UsersService {
         id: id,
       },
     });
+
+    console.log({ result });
+
     if (user) {
       return user;
     }
