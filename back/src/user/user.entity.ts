@@ -13,6 +13,9 @@ class User {
 
   @Column()
   password: string;
+
+  @Column({ default: false })
+  emailValidated: boolean;
 }
 
 export default User;
