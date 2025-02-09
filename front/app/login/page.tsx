@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!email || !password) {
-      notify.error("Tous les champs sont obligatoires.");
+      notify.error("Please fill all fields");
       return;
     }
 

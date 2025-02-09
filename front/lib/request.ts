@@ -3,7 +3,6 @@ import { notify } from "@/lib/toastService";
 
 const request = axios.create({
   baseURL: process.env.API_URL,
-  // timeout: 1000, // Délai d'attente de 10 secondes
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -58,7 +57,6 @@ const showToastError = (errors: AxiosError<{ message: string[] }>) => {
   }
 };
 
-// Fonction pour la requête DELETE
 export const deleteRequest = async <T>(
   url: string,
   config?: AxiosRequestConfig

@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 
 const TOKEN_KEY = "auth_token";
 
-// --- SET TOKEN ---
 export const setAuthToken = (token: string) => {
   Cookies.set(TOKEN_KEY, token, {
     expires: 7,
