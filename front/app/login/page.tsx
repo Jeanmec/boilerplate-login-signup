@@ -39,6 +39,7 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="p-2 border border-gray-300 rounded"
+            autoComplete="email"
             required
           />
         </label>
@@ -50,6 +51,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="p-2 border border-gray-300 rounded"
+              autoComplete="current-password"
               required
             />
           </label>

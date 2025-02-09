@@ -30,6 +30,7 @@ export default function SignUpForm({
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="p-2 border border-gray-300 rounded"
+            autoComplete="username"
             required
           />
         </label>
@@ -40,6 +41,7 @@ export default function SignUpForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="p-2 border border-gray-300 rounded"
+            autoComplete="email"
             required
           />
         </label>
@@ -50,6 +52,7 @@ export default function SignUpForm({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="p-2 border border-gray-300 rounded"
+            autoComplete="new-password"
             required
           />
         </label>

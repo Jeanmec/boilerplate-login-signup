@@ -9,8 +9,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: ['http://localhost:3001'],
-    credentials: true, // Permet l'envoi des cookies
-    methods: ['GET', 'POST', 'OPTIONS'], // Ajout de la méthode OPTIONS pour les pré-vols
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
   });
   app.useGlobalPipes(
     new ValidationPipe({
