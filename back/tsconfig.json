@@ -7,6 +7,7 @@
       "@modules/": ["src/modules"]
       // Add more aliases as needed
     },
+    // "typeRoots": ["./node_module/@types", "./src/types"],
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,

@@ -5,12 +5,12 @@ import {
   Param,
   Post,
   Delete,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import User from './user.entity';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/user.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { ResetPasswordDto } from './dto/user.dto';
+// import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -30,8 +30,8 @@ export class UsersController {
   }
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    const newUser = await this.usersService.createUser(createUserDto);
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    const newUser = await this.usersService.forgotPassword(resetPasswordDto);
     return newUser;
   }
 

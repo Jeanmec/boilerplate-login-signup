@@ -7,6 +7,9 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { RedisModule } from 'redis/redis.module';
+import { CommonModule } from 'common/common.module';
+import { MailModule } from 'mail/mail.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { JwtStrategy } from './jwt.strategy';
       },
     }),
     TypeOrmModule.forFeature([User]),
+    RedisModule,
+    CommonModule,
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

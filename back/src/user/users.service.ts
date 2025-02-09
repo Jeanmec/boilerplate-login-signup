@@ -2,7 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import User from './user.entity';
-import { CreateUserDto } from './dto/user.dto';
+import { ResetPasswordDto } from './dto/user.dto';
 import { MailService } from '../mail/mail.service';
 import { CommonService } from 'common/common.service';
 import { RedisService } from 'redis/redis.service';
@@ -34,33 +34,6 @@ export class UsersService {
     throw new NotFoundException('Could not find the user');
   }
 
-  async createUser(createUserDto: CreateUserDto) {
-    const existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
-    });
-
-    if (existingUser) {
-      throw new BadRequestException('User with this email already exists');
-    }
-
-    const randomCode = this.commonService.generateRandomNumber(6);
-
-    await this.redisService.set(
-      createUserDto.email,
-      randomCode.toString(),
-      60 * 15,
-    );
-
-    await this.mailService.sendMail(createUserDto.email, 'verification-code', {
-      code: randomCode,
-    });
-
-    const newUser = this.usersRepository.create(createUserDto);
-    await this.usersRepository.save(newUser);
-
-    return newUser;
-  }
-
   async deleteById(id: number) {
     const user = await this.usersRepository.findOne({
       where: {
@@ -73,5 +46,28 @@ export class UsersService {
 
     await this.usersRepository.remove(user);
     return user;
+  }
+
+  async forgotPassword(resetPasswordDto: ResetPasswordDto) {
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: resetPasswordDto.email },
+    });
+
+    if (!existingUser) {
+      throw new BadRequestException('User with this email does not exist');
+    }
+
+    const randomCode = this.commonService.generateRandomNumber(6);
+
+    await this.redisService.setValidationUserEmail(
+      resetPasswordDto.email,
+      randomCode.toString(),
+    );
+
+    await this.mailService.sendMail(resetPasswordDto.email, 'reset-password', {
+      code: randomCode,
+    });
+
+    return existingUser;
   }
 }

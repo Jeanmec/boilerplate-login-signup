@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+  Req,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import User from '../user/user.entity';
@@ -6,6 +11,11 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { RedisService } from 'redis/redis.service';
+import { CommonService } from 'common/common.service';
+import { MailService } from 'mail/mail.service';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -13,10 +23,23 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
+    private redisService: RedisService,
+    private commonService: CommonService,
+    private mailService: MailService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
+  async signUp(
+    signUpDto: SignUpDto,
+  ): Promise<{ message: string; token: string }> {
     const { name, email, password } = signUpDto;
+
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('User with this email already exists');
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -28,16 +51,28 @@ export class AuthService {
 
     await this.usersRepository.save(user);
 
+    const randomCode = this.commonService.generateRandomString(8);
+
+    await this.redisService.setValidationUserEmail(
+      email,
+      randomCode.toString(),
+    );
+
+    await this.mailService.sendMail(email, 'verification-code', {
+      code: randomCode,
+    });
+
     const token = this.jwtService.sign({ id: user.id });
 
-    return { token };
+    return { message: 'Verify your email to complete registration', token };
   }
 
-  async login(loginDto: LoginDto): Promise<{ token: string }> {
+  async login(loginDto: LoginDto): Promise<{ message: string; token: string }> {
     const { email, password } = loginDto;
 
     const user = await this.usersRepository.findOne({
       where: { email },
+      select: ['id', 'email', 'password'],
     });
 
     if (!user) {
@@ -52,6 +87,31 @@ export class AuthService {
 
     const token = this.jwtService.sign({ id: user.id });
 
-    return { token };
+    return { message: 'Login successful', token };
+  }
+
+  async verifyEmail(verifyEmailDto: VerifyEmailDto, @Req() req: Request) {
+    const { code } = verifyEmailDto;
+    const { email } = req.user;
+
+    const validCode = await this.redisService.getValidationUserEmail(email);
+
+    if (validCode !== code) {
+      throw new BadRequestException('Invalid verification code');
+    }
+
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User with this email does not exist');
+    }
+
+    user.emailValidated = true;
+
+    await this.usersRepository.save(user);
+
+    return { message: 'Email verified successfully', user };
   }
 }

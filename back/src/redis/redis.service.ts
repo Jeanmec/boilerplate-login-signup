@@ -25,6 +25,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     console.log('❌ Déconnexion de Redis');
   }
 
+  async setValidationUserEmail(email: string, code: string): Promise<void> {
+    await this.set(`validation:email:${email}`, code, 15 * 60);
+  }
+
+  async getValidationUserEmail(email: string): Promise<string | null> {
+    return this.get(`validation:email:${email}`);
+  }
+
   async set(
     key: string,
     value: string,
