@@ -1,16 +1,14 @@
-I have written an article to help you understand this NestJS application code. You can find it here: [`NestJS App with Authentication: Login and Signup`](https://www.linkedin.com/pulse/nestjs-app-authentication-login-signup-moaz-irfan)
+## Setting up Project
 
-The Frontend dashboard repo to serve this backend service is here: [`Frontend-Dashbard`](https://github.com/MoazIrfan/Frontend-NestJS-Authentication-Login-Signup)
+Open PostgreSQL command line interface and run:
 
-
-## Setting up Project 
-Open PostgreSQL command line interface and run: 
 ```
 CREATE DATABASE nestjs;
 ```
+
 ("Replace 'nestjs' with your preferred database name, and make sure to use that same name in your .env file."). Tables will be auto generated.
 
-## Description 
+## Description
 
 NestJS authentication application that includes login and sign-up functionalities. Used a PostgreSQL database and connected it to NestJS. To manage a database easier, used an Object-relational mapping (ORM) tool called TypeORM.
 
