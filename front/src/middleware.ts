@@ -1,4 +1,3 @@
-// middleware.ts
 import { NextResponse, type NextRequest } from "next/server";
 import { checkSignUpMiddleware } from "./middleware/checkSignUp";
 

@@ -1,4 +1,3 @@
-// src/middleware/CheckLogin.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getRequest } from "@/lib/request";
 import { TypeCurrentAccount } from "@/app/types/me.t";
