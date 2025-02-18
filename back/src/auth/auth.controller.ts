@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signup.dto';
-import { VerifyEmailDto } from './dto/verify-email.dto';
+import { EmailVericationDto } from './dto/email-verification.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UseGuards } from '@nestjs/common';
 import { Request } from 'express';
@@ -34,9 +34,12 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('/verify-email')
-  verifyEmail(@Body() verifyEmailDto: VerifyEmailDto, @Req() req: Request) {
-    return this.authService.verifyEmail(verifyEmailDto, req);
+  @Post('/email-verification')
+  emailVerification(
+    @Body() emailVerificationDto: EmailVericationDto,
+    @Req() req: Request,
+  ) {
+    return this.authService.emailVerification(emailVerificationDto, req);
   }
 
   @UseGuards(AuthGuard('jwt'))

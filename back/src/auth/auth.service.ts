@@ -11,7 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { VerifyEmailDto } from './dto/verify-email.dto';
+import { EmailVericationDto } from './dto/email-verification.dto';
 import { RedisService } from 'redis/redis.service';
 import { CommonService } from 'common/common.service';
 import { MailService } from 'mail/mail.service';
@@ -92,8 +92,11 @@ export class AuthService {
     return { message: 'Login successful', token };
   }
 
-  async verifyEmail(verifyEmailDto: VerifyEmailDto, @Req() req: Request) {
-    const { code } = verifyEmailDto;
+  async emailVerification(
+    emailVerificationDto: EmailVericationDto,
+    @Req() req: Request,
+  ) {
+    const { code } = emailVerificationDto;
     const { email } = req.user;
 
     const validCode = await this.redisService.getValidationUserEmail(email);

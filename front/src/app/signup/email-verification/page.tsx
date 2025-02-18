@@ -7,7 +7,7 @@ import { useToastRedirection } from "@/lib/ToastRedirectionContext";
 import { notify } from "@/lib/toastService";
 import { useState } from "react";
 
-export default function VerifyEmail() {
+export default function EmailVerification() {
   const [code, setCode] = useState("");
   const { setToastRedirection } = useToastRedirection();
   const [newCode, setNewCode] = useState(false);
@@ -16,7 +16,7 @@ export default function VerifyEmail() {
     e.preventDefault();
 
     const response = await postRequest<{ code: string }, TypeBasicRequest>(
-      "/auth/verify-email",
+      "/auth/email-verification",
       {
         code,
       }

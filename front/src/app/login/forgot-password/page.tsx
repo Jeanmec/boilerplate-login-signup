@@ -8,7 +8,7 @@ import { useToastRedirection } from "@/lib/ToastRedirectionContext";
 import ResetPasswordForm from "./resetPasswordForm";
 import { TypeBasicRequest } from "@/app/types/request.t";
 
-export default function VerifyEmail() {
+export default function ForgotPassword() {
   const [codeSended, setCodeSended] = useState(false);
   const [code, setCode] = useState("");
   const [email, setEmail] = useState("");
