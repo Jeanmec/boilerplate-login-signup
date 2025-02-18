@@ -1,8 +1,6 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IntersectionType } from '@nestjs/mapped-types';
+import { EmailVerificationCodeDto } from 'dto/field/email-verification-code.tdo';
 
-export class VerifyEmailDto {
-  @IsNotEmpty({ message: 'Code cannot be empty' })
-  @IsString({ message: 'Code must be a string' })
-  @MinLength(8, { message: 'Code must be at least 8 characters long' })
-  code: string;
-}
+export class VerifyEmailDto extends IntersectionType(
+  EmailVerificationCodeDto,
+) {}

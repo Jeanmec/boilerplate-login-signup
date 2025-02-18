@@ -5,11 +5,11 @@ import { join } from 'path';
 
 const mailTemplates = {
   'verification-code': {
-    title: 'Vérification de votre adresse email',
+    title: 'Sign Up Verification Code',
     file: 'verificationCode',
   },
   'reset-password': {
-    title: 'Réinitialisation de votre mot de passe',
+    title: 'Reset Password Code',
     file: 'resetPassword',
   },
 };

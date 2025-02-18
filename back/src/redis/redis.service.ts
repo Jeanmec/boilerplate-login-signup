@@ -33,6 +33,18 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     return this.get(`validation:email:${email}`);
   }
 
+  async setForgotPassword(email: string, code: string): Promise<void> {
+    await this.set(`forgot-password:${email}`, code, 15 * 60);
+  }
+
+  async getForgotPassword(email: string): Promise<string | null> {
+    return this.get(`forgot-password:${email}`);
+  }
+
+  async delForgotPassword(email: string): Promise<void> {
+    await this.del(`forgot-password:${email}`);
+  }
+
   async set(
     key: string,
     value: string,

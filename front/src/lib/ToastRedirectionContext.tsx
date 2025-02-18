@@ -6,11 +6,7 @@ import { useRouter } from "next/navigation";
 type toastType = "success" | "error" | "info" | "warning";
 
 interface ToastContextType {
-  setToastRedirection: (
-    message: string,
-    type?: toastType,
-    path: string
-  ) => void;
+  setToastRedirection: (message: string, type: toastType, path: string) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);

@@ -1,11 +1,11 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import User from './user.entity';
-import { ResetPasswordDto } from './dto/user.dto';
-import { MailService } from '../mail/mail.service';
+import { MailService } from 'mail/mail.service';
 import { CommonService } from 'common/common.service';
 import { RedisService } from 'redis/redis.service';
+import { Request } from 'express';
 
 export class UsersService {
   constructor(
@@ -48,26 +48,7 @@ export class UsersService {
     return user;
   }
 
-  async forgotPassword(resetPasswordDto: ResetPasswordDto) {
-    const existingUser = await this.usersRepository.findOne({
-      where: { email: resetPasswordDto.email },
-    });
-
-    if (!existingUser) {
-      throw new BadRequestException('User with this email does not exist');
-    }
-
-    const randomCode = this.commonService.generateRandomNumber(6);
-
-    await this.redisService.setValidationUserEmail(
-      resetPasswordDto.email,
-      randomCode.toString(),
-    );
-
-    await this.mailService.sendMail(resetPasswordDto.email, 'reset-password', {
-      code: randomCode,
-    });
-
-    return existingUser;
+  async getCurrentUser(req: Request): Promise<User> {
+    return req.user;
   }
 }

@@ -1,12 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IntersectionType } from '@nestjs/mapped-types';
+import { EmailDto } from 'dto/field/email.dto';
+import { PasswordDto } from 'dto/field/password.dto';
 
-export class LoginDto {
-  @IsNotEmpty()
-  @IsEmail({}, { message: 'Please enter correct email' })
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(6)
-  password: string;
-}
+export class LoginDto extends IntersectionType(EmailDto, PasswordDto) {}

@@ -1,5 +1,3 @@
-// lib/authStorage.ts
-
 import Cookies from "js-cookie";
 
 const TOKEN_KEY = "auth_token";

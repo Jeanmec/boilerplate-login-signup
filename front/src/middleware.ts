@@ -1,16 +1,24 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+// middleware.ts
+import { NextResponse, type NextRequest } from "next/server";
+import { checkSignUpMiddleware } from "./middleware/checkSignUp";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  console.log("test");
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname.startsWith("/dashboard")) {
+    const response = await checkSignUpMiddleware(request);
+    if (response instanceof NextResponse) {
+      return response;
+    }
+  }
 
   return NextResponse.next();
 }
 
-// Here is the matcher config.
-// Set an array of paths that are able to invoke middleware.
-// Also accepts wildcard paths.
+export function redirectTo(url: string, request: NextRequest) {
+  return NextResponse.redirect(new URL(url, request.url));
+}
+
 export const config = {
-  matcher: ["/login", "/account"],
+  matcher: ["/dashboard/:path*", "/signup/:path*"],
 };

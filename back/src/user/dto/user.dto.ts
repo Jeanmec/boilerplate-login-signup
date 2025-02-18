@@ -16,9 +16,3 @@ export class CreateUserDto {
   })
   password: string;
 }
-
-export class ResetPasswordDto {
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-}

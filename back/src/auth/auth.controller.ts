@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signup.dto';
@@ -6,6 +6,8 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UseGuards } from '@nestjs/common';
 import { Request } from 'express';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,13 +24,24 @@ export class AuthController {
   }
 
   @Post('/forgot-password')
-  forgotPassword() {
-    // implement forgot password functionality
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('/reset-password')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/verify-email')
   verifyEmail(@Body() verifyEmailDto: VerifyEmailDto, @Req() req: Request) {
     return this.authService.verifyEmail(verifyEmailDto, req);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/signup-verification-code')
+  getSignUpVerificationCode(@Req() req: Request) {
+    return this.authService.getSignUpVerificationCode(req);
   }
 }

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { notify } from "@/lib/toastService";
 
 const request = axios.create({
@@ -16,7 +16,10 @@ export type ApiResponse<T> = {
   headers: Record<string, string>;
 };
 
-export const postRequest = async <T, R>(url: string, data: T): Promise<R> => {
+export const postRequest = async <T, R>(
+  url: string,
+  data: T
+): Promise<R | undefined> => {
   try {
     if (process.env.NEXT_PUBLIC_API_URL) {
       const response: AxiosResponse<R> = await request.post(
@@ -26,25 +29,27 @@ export const postRequest = async <T, R>(url: string, data: T): Promise<R> => {
       return response.data;
     }
   } catch (error) {
-    showToastError(error);
+    showToastError(error as AxiosError<{ message: string[] }>);
     throw error;
   }
 };
 
-export const putRequest = async <T, R>(
+export const getRequest = async <T>(
   url: string,
-  data: T,
-  config?: AxiosRequestConfig
-): Promise<R> => {
+  token?: string
+): Promise<T | undefined> => {
   try {
-    const response: AxiosResponse<R> = await request.put(url, data, config);
-    return response.data;
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const response: AxiosResponse<T> = await request.get(
+        `${process.env.NEXT_PUBLIC_API_URL}${url}`,
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+      );
+      return response.data;
+    }
   } catch (error) {
-    console.error("Erreur PUT:", error);
     throw error;
   }
 };
-
 const showToastError = (errors: AxiosError<{ message: string[] }>) => {
   if (errors?.response?.data?.message) {
     if (Array.isArray(errors.response.data.message)) {
@@ -54,19 +59,6 @@ const showToastError = (errors: AxiosError<{ message: string[] }>) => {
     } else {
       notify.error(errors.response.data.message);
     }
-  }
-};
-
-export const deleteRequest = async <T>(
-  url: string,
-  config?: AxiosRequestConfig
-): Promise<T> => {
-  try {
-    const response: AxiosResponse<T> = await request.delete(url, config);
-    return response.data;
-  } catch (error) {
-    console.error("Erreur DELETE:", error);
-    throw error;
   }
 };
 
