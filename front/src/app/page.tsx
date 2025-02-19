@@ -1,6 +1,4 @@
 import Link from "next/link";
-import SignOutButton from "./components/SignOutButton";
-
 export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
@@ -13,7 +11,6 @@ export default function Home() {
           Go to /me
         </Link>
       </div>
-      <SignOutButton />
     </div>
   );
 }
