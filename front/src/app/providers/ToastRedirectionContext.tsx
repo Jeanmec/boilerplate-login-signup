@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, ReactNode } from "react";
-import { notify } from "./toastService";
+import { notify } from "../../lib/toastService";
 import { useRouter } from "next/navigation";
 
 type toastType = "success" | "error" | "info" | "warning";

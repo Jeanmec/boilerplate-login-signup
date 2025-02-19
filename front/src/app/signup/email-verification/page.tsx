@@ -1,9 +1,9 @@
 "use client";
 
-import SignOutButton from "@/app/components/signOutButton";
+import SignOutButton from "@/app/components/SignOutButton";
 import { TypeBasicRequest } from "@/app/types/request.t";
 import { getRequest, postRequest } from "@/lib/request";
-import { useToastRedirection } from "@/lib/ToastRedirectionContext";
+import { useToastRedirection } from "@/app/providers/ToastRedirectionContext";
 import { notify } from "@/lib/toastService";
 import { useState } from "react";
 

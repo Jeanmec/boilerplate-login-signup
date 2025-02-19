@@ -1,5 +1,5 @@
 import { ToastService } from "@/lib/toastService";
-import { ToastProvider } from "@/lib/ToastRedirectionContext";
+import { ToastProvider } from "@/app/providers/ToastRedirectionContext";
 import "./globals.css";
 
 export default function RootLayout({

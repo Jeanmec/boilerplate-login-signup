@@ -3,10 +3,10 @@
 import { postRequest } from "@/lib/request";
 import { notify } from "@/lib/toastService";
 import { useState } from "react";
-import ForgotPasswordForm from "./forgotPasswordForm";
-import { useToastRedirection } from "@/lib/ToastRedirectionContext";
-import ResetPasswordForm from "./resetPasswordForm";
+import { useToastRedirection } from "@/app/providers/ToastRedirectionContext";
 import { TypeBasicRequest } from "@/app/types/request.t";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 export default function ForgotPassword() {
   const [codeSended, setCodeSended] = useState(false);
