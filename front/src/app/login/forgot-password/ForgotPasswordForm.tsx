@@ -1,36 +1,60 @@
-interface ForgotPasswordFormProps {
-  email: string;
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  forgotPasswordSchema,
+  ForgotPasswordSchema,
+} from "@/validation/authSchemas";
+import { postRequest } from "@/lib/request";
+import { notify } from "@/lib/toastService";
+
+interface Props {
   setEmail: (email: string) => void;
-  handleForgotPassword: (e: React.FormEvent) => void;
 }
 
-export default function ForgotPasswordForm({
-  email,
-  setEmail,
-  handleForgotPassword,
-}: ForgotPasswordFormProps) {
+export default function ForgotPasswordForm({ setEmail }: Props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordSchema>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
+
+  const onSubmit = async (data: ForgotPasswordSchema) => {
+    setEmail(data.email);
+    const response = await postRequest("/auth/forgot-password", data);
+
+    if (response && response.message) {
+      notify.info(response.message);
+    }
+  };
+
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
-      <h1 className="text-5xl font-bold">Forgot your password?</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+      <h1 className="text-3xl font-bold">Mot de passe oublié ?</h1>
       <form
-        onSubmit={handleForgotPassword}
-        className="flex flex-col gap-4 w-80"
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-80 flex flex-col gap-4"
       >
         <p className="text-center">
-          If your email is in our database, you will receive an email with a
-          code to reset your password.
+          Entrez votre email pour recevoir un code de réinitialisation.
         </p>
         <label className="flex flex-col gap-1">
           <span>Email</span>
           <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            {...register("email")}
             className="input input-bordered"
-            required
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
         </label>
-        <button className="btn btn-primary">Reset my password</button>
+        <button type="submit" className="btn btn-primary">
+          Envoyer
+        </button>
       </form>
     </div>
   );

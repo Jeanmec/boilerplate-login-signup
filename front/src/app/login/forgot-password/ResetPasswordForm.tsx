@@ -1,60 +1,78 @@
-interface CodeVerificationProps {
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  resetPasswordSchema,
+  ResetPasswordSchema,
+} from "@/validation/authSchema";
+import { postRequest } from "@/lib/request";
+import { useToastRedirection } from "@/app/providers/ToastRedirectionContext";
+
+interface Props {
   email: string;
-  code: string;
-  password: string;
-  setCode: (code: string) => void;
-  setPassword: (password: string) => void;
-  handleResetPassword: (e: React.FormEvent) => void;
 }
 
-export default function ResetPasswordForm({
-  password,
-  setPassword,
-  email,
-  code,
-  setCode,
-  handleResetPassword,
-}: CodeVerificationProps) {
+export default function ResetPasswordForm({ email }: Props) {
+  const { setToastRedirection } = useToastRedirection();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordSchema>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: { email },
+  });
+
+  const onSubmit = async (data: ResetPasswordSchema) => {
+    const response = await postRequest("/auth/reset-password", data);
+
+    if (response && response.message) {
+      setToastRedirection(response.message, "success", "/login");
+    }
+  };
+
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
-      <h1 className="text-5xl font-bold">Reset your password</h1>
-      <form onSubmit={handleResetPassword} className="flex flex-col gap-4 w-80">
-        <p className="text-center">
-          Enter the code you received in your email to reset your password.
-        </p>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+      <h1 className="text-3xl font-bold">Réinitialiser le mot de passe</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-80 flex flex-col gap-4"
+      >
         <label className="flex flex-col gap-1">
           <span>Email</span>
           <input
-            type="text"
-            value={email}
-            disabled
+            type="email"
+            {...register("email")}
             className="input input-bordered"
-            required
+            disabled
           />
         </label>
         <label className="flex flex-col gap-1">
           <span>Code</span>
           <input
             type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
+            {...register("code")}
             className="input input-bordered"
-            required
           />
+          {errors.code && (
+            <p className="text-red-500 text-sm">{errors.code.message}</p>
+          )}
         </label>
         <label className="flex flex-col gap-1">
-          <span>New password</span>
+          <span>Nouveau mot de passe</span>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             className="input input-bordered"
-            autoComplete="new-password"
-            required
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </label>
         <button type="submit" className="btn btn-primary">
-          Reset my password
+          Réinitialiser
         </button>
       </form>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import SignOutButton from "@/app/components/SignOutButton";
+import SignOutButton from "@/app/components/LogOutButton";
 import { TypeBasicRequest } from "@/app/types/request.t";
 import { getRequest, postRequest } from "@/lib/request";
 import { useToastRedirection } from "@/app/providers/ToastRedirectionContext";

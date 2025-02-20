@@ -3,7 +3,7 @@ import { getRequest } from "@/lib/request";
 import { TypeCurrentAccount } from "@/app/types/me.t";
 import { redirectTo } from "../middleware";
 
-export async function checkSignUpMiddleware(
+export async function emailVerificationMiddleware(
   request: NextRequest
 ): Promise<TypeCurrentAccount | NextResponse | undefined> {
   const token = request.cookies.get("auth_token");

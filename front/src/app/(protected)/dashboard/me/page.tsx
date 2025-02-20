@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getRequest } from "@/lib/request";
 import { TypeCurrentAccount } from "@/app/types/me.t";
+import SignOutButton from "@/app/components/LogOutButton";
 
 export default function Me() {
   const [name, setName] = useState("");
@@ -35,9 +36,7 @@ export default function Me() {
         <>
           <h1>Welcome, {name}</h1>
           <p>Email: {email}</p>
-          <div>
-            <button className="btn btn-error">Logout</button>
-          </div>
+          <SignOutButton />
           <div className="flex gap-4">
             <Link href="/" className="btn btn-outline btn-info">
               Go to home

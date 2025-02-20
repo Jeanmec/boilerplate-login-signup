@@ -13,7 +13,7 @@ export default function SignOutButton() {
 
   return (
     <button onClick={handleSignOut} className="btn btn-error">
-      Sign out
+      Log out
     </button>
   );
 }
