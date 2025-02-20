@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import * as randomstring from 'randomstring';
 
 @Injectable()
 export class CommonService {
   generateRandomString(length: number): string {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * characters.length),
-      );
-    }
-    return result;
+    return randomstring.generate({
+      length,
+      charset: 'alphanumeric',
+    });
   }
 }
