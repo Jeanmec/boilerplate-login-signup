@@ -1,6 +1,6 @@
 "use client";
 
-import { removeAuthToken } from "@/lib/authStorage";
+import { removeAuthToken } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 
 export default function SignOutButton() {

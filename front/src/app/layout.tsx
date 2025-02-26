@@ -1,6 +1,7 @@
 import { ToastService } from "@/lib/toastService";
-import { ToastProvider } from "@/app/providers/ToastRedirectionContext";
+import { ToastProvider } from "@/providers/ToastRedirectionContext";
 import "./globals.css";
+import UserProvider from "@/providers/UserProvider";
 
 export default function RootLayout({
   children,
@@ -10,10 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ToastProvider>
-          <ToastService />
-          {children}
-        </ToastProvider>
+        <UserProvider>
+          <ToastProvider>
+            <ToastService />
+            {children}
+          </ToastProvider>
+        </UserProvider>
       </body>
     </html>
   );

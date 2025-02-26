@@ -1,19 +1,16 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   forgotPasswordSchema,
   ForgotPasswordSchema,
-} from "@/validation/authSchemas";
-import { postRequest } from "@/lib/request";
-import { notify } from "@/lib/toastService";
+} from "@/validation/authSchema";
+import { useFormErrorNotifier } from "@/hooks/useFormErrorNotifier";
 
 interface Props {
-  setEmail: (email: string) => void;
+  onSubmit: (email: string) => void;
 }
 
-export default function ForgotPasswordForm({ setEmail }: Props) {
+export default function ForgotPasswordForm({ onSubmit }: Props) {
   const {
     register,
     handleSubmit,
@@ -22,20 +19,13 @@ export default function ForgotPasswordForm({ setEmail }: Props) {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const onSubmit = async (data: ForgotPasswordSchema) => {
-    setEmail(data.email);
-    const response = await postRequest("/auth/forgot-password", data);
-
-    if (response && response.message) {
-      notify.info(response.message);
-    }
-  };
+  useFormErrorNotifier(errors);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6">
       <h1 className="text-3xl font-bold">Mot de passe oublié ?</h1>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => onSubmit(data.email))}
         className="w-80 flex flex-col gap-4"
       >
         <p className="text-center">
@@ -48,9 +38,6 @@ export default function ForgotPasswordForm({ setEmail }: Props) {
             {...register("email")}
             className="input input-bordered"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
         </label>
         <button type="submit" className="btn btn-primary">
           Envoyer

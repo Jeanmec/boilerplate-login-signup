@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import { postRequest } from "@/lib/request";
-import { setAuthToken } from "@/lib/authStorage";
-import { useToastRedirection } from "@/app/providers/ToastRedirectionContext";
+import { setAuthToken } from "@/store/authStore";
+import { useToastRedirection } from "@/providers/ToastRedirectionContext";
 import Link from "next/link";
-import { TypeBasicRequest } from "../types/request.t";
+import { userService } from "@/services/user.service";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -15,10 +14,7 @@ export default function SignUp() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await postRequest<
-      { name: string; email: string; password: string },
-      TypeBasicRequest
-    >("/auth/signup", { name, email, password });
+    const response = await userService.signUp(name, email, password);
 
     if (response && response.token) {
       setAuthToken(response.token);

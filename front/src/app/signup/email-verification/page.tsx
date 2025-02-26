@@ -1,11 +1,10 @@
 "use client";
 
 import SignOutButton from "@/app/components/LogOutButton";
-import { TypeBasicRequest } from "@/app/types/request.t";
-import { getRequest, postRequest } from "@/lib/request";
-import { useToastRedirection } from "@/app/providers/ToastRedirectionContext";
+import { useToastRedirection } from "@/providers/ToastRedirectionContext";
 import { notify } from "@/lib/toastService";
 import { useState } from "react";
+import { userService } from "@/services/user.service";
 
 export default function EmailVerification() {
   const [code, setCode] = useState("");
@@ -15,24 +14,16 @@ export default function EmailVerification() {
   const handleVerificationEmail = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await postRequest<{ code: string }, TypeBasicRequest>(
-      "/auth/email-verification",
-      {
-        code,
-      }
-    );
+    const response = await userService.verifyEmail(code);
 
-    if (response && response.message) {
+    if (response?.message) {
       setToastRedirection(response.message, "success", "/login");
     }
   };
 
   const handleNewCode = async () => {
-    const response = await getRequest<TypeBasicRequest>(
-      "/auth/signup-verification-code"
-    );
-
-    if (response && response.message) {
+    const response = await userService.getSignupVerificationCode();
+    if (response?.message) {
       notify.info(response.message);
       setNewCode(true);
     }
