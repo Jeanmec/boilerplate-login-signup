@@ -25,7 +25,7 @@ services:
     networks:
       - app_network
 
-  backend:
+  nest:
     build: .
     container_name: boilerplate_nest
     restart: always
@@ -38,6 +38,7 @@ services:
       - '3000:3000'
     volumes:
       - .:/app
+      - /app/node_modules
     networks:
       - app_network
 
