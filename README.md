@@ -55,33 +55,44 @@ Before running the backend, create a `.env` file in the root directory and confi
 ```env
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
-POSTGRES_USER=
-POSTGRES_PASSWORD=
-POSTGRES_DB=
+POSTGRES_USER=myUsername
+POSTGRES_PASSWORD=MyPassword
+POSTGRES_DB=myDbName
 PORT=5000
 
-JWT_SECRET=
+JWT_SECRET=randomSecret
 JWT_EXPIRES=3d
 
-NODEMAILER_HOST=
-NODEMAILER_PORT=
-NODEMAILER_SECURE=
-NODEMAILER_AUTH_USER=
-NODEMAILER_AUTH_PASS=
-NODEMAIL_CONTACT_HEADER=
+NODEMAILER_HOST=mail.example.com
+NODEMAILER_PORT=465
+NODEMAILER_SECURE=false
+NODEMAILER_AUTH_USER=contact@example.com
+NODEMAILER_AUTH_PASS=MyPassword
+NODEMAIL_CONTACT_HEADER="Contact Example <contact@example.com>"
 ```
 
 ### ▶️ Running the Backend
 
-Start Redis server:
+Start the backend using Docker:
 
 ```sh
-redis-server
+docker-compose up -d
 ```
 
-Install dependencies and run the backend in development mode:
+To view backend logs:
 
 ```sh
-yarn install
-yarn start:dev
+docker-compose logs -f backend
+```
+
+To enter the backend container:
+
+```sh
+docker exec -it boilerplate_backend bash
+```
+
+To stop all containers:
+
+```sh
+docker-compose down
 ```
