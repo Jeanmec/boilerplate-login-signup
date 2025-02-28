@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: boilerplate_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  redis:
+    image: redis:latest
+    container_name: boilerplate_redis
+    restart: always
+    networks:
+      - app_network
+
+  backend:
+    build: .
+    container_name: boilerplate_nest
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
