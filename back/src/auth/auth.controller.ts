@@ -27,20 +27,20 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  @Post('/forgot-password')
+  @Post('/password/forgot')
   @ApiOperation({ summary: 'Forgot password' })
   forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     return this.authService.forgotPassword(forgotPasswordDto);
   }
 
-  @Post('/reset-password')
+  @Post('/password/reset')
   @ApiOperation({ summary: 'Reset password' })
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.authService.resetPassword(resetPasswordDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('/email-verification')
+  @Post('/email/verify')
   emailVerification(
     @Body() emailVerificationDto: EmailVericationDto,
     @Req() req: Request,
@@ -49,7 +49,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/signup-verification-code')
+  @Get('/email/verification-code')
   getSignUpVerificationCode(@Req() req: Request) {
     return this.authService.getSignUpVerificationCode(req);
   }

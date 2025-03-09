@@ -22,7 +22,7 @@ class UserService {
   async getSignupVerificationCode(): Promise<TypeBasicRequest> {
     try {
       const response = await getRequest<TypeBasicRequest>(
-        "/auth/signup-verification-code"
+        "/auth/email/verification-code"
       );
       return response;
     } catch (error) {
@@ -34,7 +34,7 @@ class UserService {
   async verifyEmail(code: string): Promise<TypeBasicRequest> {
     try {
       const response = await postRequest<{ code: string }, TypeBasicRequest>(
-        "/auth/email-verification",
+        "/auth/email/verify",
         { code }
       );
       return response;
@@ -47,7 +47,7 @@ class UserService {
   async forgotPassword(email: string): Promise<TypeBasicRequest> {
     try {
       const response = await postRequest<{ email: string }, TypeBasicRequest>(
-        "/auth/forgot-password",
+        "/auth/password/forgot",
         { email }
       );
       return response;
@@ -96,7 +96,7 @@ class UserService {
       const response = await postRequest<
         { email: string; code: string; password: string },
         TypeBasicRequest
-      >("/auth/reset-password", { email, code, password });
+      >("/auth/password/reset", { email, code, password });
       return response;
     } catch (error) {
       console.error("An error occurred:", error);
