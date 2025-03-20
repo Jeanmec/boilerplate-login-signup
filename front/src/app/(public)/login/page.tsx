@@ -4,6 +4,7 @@ import Link from "next/link";
 import { setAuthToken } from "@/store/authStore";
 import { useToastRedirection } from "@/providers/ToastRedirectionContext";
 import { userService } from "@/services/user.service";
+import Navbar from "@/app/components/Navbar";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -24,52 +25,54 @@ export default function Login() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
-      <h1 className="text-5xl font-bold">Login</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-80">
-        <label className="flex flex-col gap-1">
-          <span>Email</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input input-bordered"
-            autoComplete="email"
-            required
-          />
-        </label>
-        <div>
+    <Navbar>
+      <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
+        <h1 className="text-5xl font-bold">Login</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-80">
           <label className="flex flex-col gap-1">
-            <span>Password</span>
+            <span>Email</span>
             <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="input input-bordered"
-              autoComplete="current-password"
+              autoComplete="email"
               required
             />
           </label>
-          <Link
-            href="/login/forgot-password"
-            className="underline text-blue-500 mt-2"
+          <div>
+            <label className="flex flex-col gap-1">
+              <span>Password</span>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input input-bordered"
+                autoComplete="current-password"
+                required
+              />
+            </label>
+            <Link
+              href="/login/forgot-password"
+              className="underline text-blue-500 mt-2"
+            >
+              Forgot password ?
+            </Link>
+          </div>
+          <button
+            type="submit"
+            className="btn btn-primary py-2 mt-4 rounded bg-blue-500 text-white"
           >
-            Forgot password ?
-          </Link>
-        </div>
-        <button
-          type="submit"
-          className="btn btn-primary py-2 mt-4 rounded bg-blue-500 text-white"
-        >
-          Login
-        </button>
-        <div className="flex gap-2">
-          <span>No account ?</span>
-          <Link href="/signup" className="underline text-blue-500">
-            Sign up
-          </Link>
-        </div>
-      </form>
-    </div>
+            Login
+          </button>
+          <div className="flex gap-2">
+            <span>No account ?</span>
+            <Link href="/signup" className="underline text-blue-500">
+              Sign up
+            </Link>
+          </div>
+        </form>
+      </div>
+    </Navbar>
   );
 }
