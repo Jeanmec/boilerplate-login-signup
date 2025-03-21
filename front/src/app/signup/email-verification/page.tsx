@@ -1,20 +1,35 @@
 "use client";
-
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import SignOutButton from "@/app/components/LogOutButton";
 import { useToastRedirection } from "@/providers/ToastRedirectionContext";
 import { notify } from "@/lib/toastService";
-import { useState } from "react";
 import { userService } from "@/services/user.service";
+import {
+  EmailVerificationCodeDto,
+  emailVerificationCodeSchema,
+} from "@/validation/auth.validation";
+import { useFormErrorNotifier } from "@/hooks/useFormErrorNotifier";
+import { useState } from "react";
 
 export default function EmailVerification() {
-  const [code, setCode] = useState("");
   const { setToastRedirection } = useToastRedirection();
   const [newCode, setNewCode] = useState(false);
 
-  const handleVerificationEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EmailVerificationCodeDto>({
+    resolver: zodResolver(emailVerificationCodeSchema),
+  });
 
-    const response = await userService.verifyEmail(code);
+  useFormErrorNotifier(errors);
+
+  const handleVerificationEmail = async (data: EmailVerificationCodeDto) => {
+    const { code } = data;
+
+    const response = await userService.emailVerification(code);
 
     if (response?.message) {
       setToastRedirection(response.message, "success", "/login");
@@ -31,19 +46,17 @@ export default function EmailVerification() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
-      <h1 className="text-5xl font-bold">Verify your email</h1>
+      <h1 className="text-5xl font-bold">Email verification</h1>
       <form
-        onSubmit={handleVerificationEmail}
+        onSubmit={handleSubmit(handleVerificationEmail)}
         className="flex flex-col gap-4 w-80"
       >
         <label className="flex flex-col gap-1">
           <span>Code</span>
           <input
             type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
+            {...register("code")}
             className="input input-bordered"
-            required
           />
         </label>
         <button

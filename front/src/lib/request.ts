@@ -9,13 +9,6 @@ const request = axios.create({
   },
 });
 
-export type ApiResponse<T> = {
-  data: T;
-  status: number;
-  statusText: string;
-  headers: Record<string, string>;
-};
-
 export const postRequest = async <T, R>(url: string, data: T): Promise<R> => {
   try {
     if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -30,7 +23,7 @@ export const postRequest = async <T, R>(url: string, data: T): Promise<R> => {
     return response.data;
   } catch (error) {
     showToastError(error as AxiosError<{ message: string[] }>);
-    throw new Error("An error occurred while sending data");
+    throw new Error("An error occurred: " + error);
   }
 };
 
@@ -50,7 +43,8 @@ export const getRequest = async <T>(
 
     return response.data;
   } catch (error) {
-    throw new Error("An error occurred while fetching data:" + error);
+    showToastError(error as AxiosError<{ message: string[] }>);
+    throw new Error("An error occurred: " + error);
   }
 };
 

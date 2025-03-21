@@ -1,11 +1,11 @@
 "use client";
-
 import { useState } from "react";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import ResetPasswordForm from "./ResetPasswordForm";
 import { notify } from "@/lib/toastService";
 import { useToastRedirection } from "@/providers/ToastRedirectionContext";
 import { userService } from "@/services/user.service";
+import { ResetPasswordDto } from "@/validation/auth.validation";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -23,16 +23,10 @@ export default function ForgotPassword() {
     }
   };
 
-  const handleResetPassword = async (data: {
-    email: string;
-    code: string;
-    password: string;
-  }) => {
-    const response = await userService.resetPassword(
-      data.email,
-      data.code,
-      data.password
-    );
+  const handleResetPassword = async (data: ResetPasswordDto) => {
+    const { email, code, password } = data;
+
+    const response = await userService.resetPassword(email, code, password);
 
     if (response?.message) {
       setToastRedirection(response.message, "success", "/login");

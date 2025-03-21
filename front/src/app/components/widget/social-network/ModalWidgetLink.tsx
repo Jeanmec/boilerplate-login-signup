@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, ReactElement, cloneElement } from "react";
 import {
-  CreateWidgetSocialLinkSchema,
+  CreateWidgetSocialLinkDto,
   createWidgetSocialLinkSchema,
-} from "@/validation/widgetSchema";
+} from "@/validation/widget.validation";
 
 interface ChildPreview {
   showText?: boolean;
@@ -18,11 +18,11 @@ interface ModalWidgetLinkProps {
 export default function ModalWidgetLink({ id, preview }: ModalWidgetLinkProps) {
   const [showText, setShowText] = useState(false);
 
-  const { register, handleSubmit } = useForm<CreateWidgetSocialLinkSchema>({
+  const { register, handleSubmit } = useForm<CreateWidgetSocialLinkDto>({
     resolver: zodResolver(createWidgetSocialLinkSchema),
   });
 
-  const onSubmit = (data: CreateWidgetSocialLinkSchema) => {
+  const onSubmit = (data: CreateWidgetSocialLinkDto) => {
     console.log(`[${id}] Submitted link:`, data.link);
   };
 

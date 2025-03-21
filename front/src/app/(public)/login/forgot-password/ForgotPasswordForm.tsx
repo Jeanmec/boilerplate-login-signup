@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   forgotPasswordSchema,
-  ForgotPasswordSchema,
-} from "@/validation/authSchema";
+  ForgotPasswordDto,
+} from "@/validation/auth.validation";
 import { useFormErrorNotifier } from "@/hooks/useFormErrorNotifier";
 
 interface Props {
@@ -15,7 +15,7 @@ export default function ForgotPasswordForm({ onSubmit }: Props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ForgotPasswordSchema>({
+  } = useForm<ForgotPasswordDto>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 

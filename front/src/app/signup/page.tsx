@@ -1,18 +1,28 @@
 "use client";
-import { useState } from "react";
-import { setAuthToken } from "@/store/authStore";
+import { useForm } from "react-hook-form";
 import { useToastRedirection } from "@/providers/ToastRedirectionContext";
-import Link from "next/link";
 import { userService } from "@/services/user.service";
+import { setAuthToken } from "@/store/authStore";
+import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormErrorNotifier } from "@/hooks/useFormErrorNotifier";
+import { signUpSchema, SignUpDto } from "@/validation/auth.validation";
 
 export default function SignUp() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { setToastRedirection } = useToastRedirection();
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpDto>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  useFormErrorNotifier(errors);
+
+  const handleSignUp = async (data: SignUpDto) => {
+    const { name, email, password } = data;
 
     const response = await userService.signUp(name, email, password);
 
@@ -32,38 +42,38 @@ export default function SignUp() {
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-8">
       <h1 className="text-5xl font-bold">Sign up</h1>
-      <form onSubmit={handleSignUp} className="flex flex-col gap-4 w-80">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(handleSignUp)();
+        }}
+        className="flex flex-col gap-4 w-80"
+      >
         <label className="flex flex-col gap-1">
           <span>Name</span>
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            {...register("name")}
             className="input input-bordered"
             autoComplete="username"
-            required
           />
         </label>
         <label className="flex flex-col gap-1">
           <span>Email</span>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
             className="input input-bordered"
             autoComplete="email"
-            required
           />
         </label>
         <label className="flex flex-col gap-1">
           <span>Password</span>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             className="input input-bordered"
             autoComplete="new-password"
-            required
           />
         </label>
         <button

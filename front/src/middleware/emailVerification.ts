@@ -18,11 +18,13 @@ export async function emailVerificationMiddleware(
     if (response === null) {
       return redirectTo("/login", request);
     }
-    if (response?.emailValidated === false) {
+    if ((response as TypeCurrentAccount).emailValidated === false) {
       return redirectTo("/signup/email-verification", request);
     }
 
-    return response;
+    if (response instanceof NextResponse) {
+      return response;
+    }
   } catch {
     return redirectTo("/login", request);
   }

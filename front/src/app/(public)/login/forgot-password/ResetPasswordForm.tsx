@@ -2,13 +2,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   resetPasswordSchema,
-  ResetPasswordSchema,
-} from "@/validation/authSchema";
+  ResetPasswordDto,
+} from "@/validation/auth.validation";
 import { useFormErrorNotifier } from "@/hooks/useFormErrorNotifier";
 
 interface Props {
   email: string;
-  onSubmit: (data: ResetPasswordSchema) => void;
+  onSubmit: (data: ResetPasswordDto) => void;
 }
 
 export default function ResetPasswordForm({ email, onSubmit }: Props) {
@@ -16,7 +16,7 @@ export default function ResetPasswordForm({ email, onSubmit }: Props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ResetPasswordSchema>({
+  } = useForm<ResetPasswordDto>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { email },
   });
